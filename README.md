@@ -1,10 +1,10 @@
 Please go to https://brew.sh/ to install Homebrew.
 Run the following commands in a Terminal AFTER installing Homebrew:
 
-brew install node
-brew install watchman
-brew tap AdoptOpenJDK/openjdk
-brew cask install adoptopenjdk8
+brew install node <br>
+brew install watchman <br>
+brew tap AdoptOpenJDK/openjdk <br>
+brew cask install adoptopenjdk8 <br>
 
 If the steps above do not work, please install Android Development environment 
 https://facebook.github.io/react-native/docs/getting-started.html#android-development-environment
