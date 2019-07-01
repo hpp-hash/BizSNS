@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-n
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
-export default class VerifyEmailScreen extends React.Component {
+export default class SucessPostScreen extends React.Component {
     static navigationOptions = {
         header: null
     }
@@ -12,12 +12,14 @@ export default class VerifyEmailScreen extends React.Component {
         return(
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                <Text style={{color: '#457EED', fontSize: wp('7%')}}>Please verify your email</Text>
+                <Image style={styles.image} source={require('../assets/success_icon.png')}/>
+                <Text style={{color: '#457EED', fontSize: wp('7%')}}>Upload Complete</Text>
+                <Text style={{color: '#457EED', fontSize: wp('4%')}}>Congrats! Your upload is successfully done</Text>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('Login')}
+                        onPress={() => this.props.navigation.navigate('WelcomeScreen')}
                     >
-                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Login </Text>
+                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> OK </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -44,10 +46,16 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: wp('10%'),
-        backgroundColor: '#457EED',
+        backgroundColor: '#00FFD1',
         padding: wp('3%'),
         marginTop: hp('5%'),
         width: wp('70%')
     },
-
+    image: {
+        borderRadius: wp('5%'),
+        marginBottom: hp('7%'),
+        width: wp('55%'),
+        height: hp('25%'),
+        resizeMode: 'contain'
+    },
 });

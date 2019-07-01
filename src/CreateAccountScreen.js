@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
         borderRadius: wp('10%'),
         backgroundColor: '#457EED',
         padding: wp('3%'),
-        marginTop: hp('5%')
+        marginTop: hp('2%')
     },
 })
