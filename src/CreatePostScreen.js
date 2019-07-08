@@ -23,18 +23,18 @@ export default class CreatePostScreen extends React.Component {
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                 <Image 
-                                    style={{width: wp('11%'), height: hp('5%'), }}
+                                    style={{width: wp('11%'), height: hp('5%'), resizeMode: 'contain'}}
                                     source={require('../assets/camera.png')}/>
                                 <Text style={{color: 'black', fontSize: wp('5%'), textAlignVertical: 'center', textAlign: 'right'}}> Image </Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{backgroundColor: "#E8E8E8", width: wp('35%'), padding: wp('2%'), borderRadius: wp('1%'), margin: wp('3%')}}
-                            onPress={() => this.props.navigation.navigate('SuccessPost')}
+                            // onPress={() => this.props.navigation.navigate('SuccessPost')}
                         >
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
                                 <Image 
-                                    style={{width: wp('11%'), height: hp('5%'), }}
+                                    style={{width: wp('11%'), height: hp('5%'), resizeMode: 'contain'}}
                                     source={require('../assets/video.png')} />
                                 <Text style={{color: 'black', fontSize: wp('5%'), textAlignVertical: 'center', textAlign: 'right'}}> Video</Text>
                             </View>

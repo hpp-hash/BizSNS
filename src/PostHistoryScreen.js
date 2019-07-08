@@ -1,48 +1,66 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, SectionList} from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, Image, Button, SectionList, TouchableOpacity, MenuImage} from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { DrawerActions } from 'react-navigation';
 
 export default class PostHistoryScreen extends React.Component {
-    static navigationOptions = {
-        title : 'Post History' 
-    }
+    static navigationOptions = ({ navigation }) => ({
+        title: 'Post History',
+        headerLeft: (
+            <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+                <Image source={require('../assets/hamburger_menu.png')} 
+                style={{
+                    resizeMode: 'contain',
+                    width: wp('13%'),
+                    height: hp('3%'),
+                }}/>
+            </TouchableOpacity>
+        )
+    });
 
     render() {
         return (
             <View style={styles.container}>
-                    <SectionList 
-                        sections={[
-                            { title: 'July 1st, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter, Instagram, LinkedIn, Pinterest' }, {content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter' },  ] },
-                            { title: 'July 2nd, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook' } ] },
-                            { title: 'July 3rd, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter' } ] },
-                            { title: 'July 4th, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, LinkedIn, Instagram, Twitter' } ] },
-                            { title: 'July 5th, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Pinterest, Twitter, Instagram' } ] },
-                            { title: 'July 6th, 2019', data: [{content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter, Pinterest' } ] },
+                <SectionList
+                    sections={[
+                        { title: 'July 1st, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter, Instagram, LinkedIn, Pinterest' }, { content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter' },] },
+                        { title: 'July 2nd, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook' }] },
+                        { title: 'July 3rd, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter' }] },
+                        { title: 'July 4th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, LinkedIn, Instagram, Twitter' }] },
+                        { title: 'July 5th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Pinterest, Twitter, Instagram' }] },
+                        { title: 'July 6th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter, Pinterest' }] },
 
-                        ]}
-                        renderSectionHeader={ ({section}) => {
-                            return(
-                                <View style={styles.headerView}>
-                                    <Text style={{fontWeight: 'bold', color: 'white', fontSize: wp('5%'), marginVertical: hp('1%')}}>{section.title}</Text>
-                                </View>
-                            );
-                        }}
-                        renderItem={ ({item}) => {
-                            console.log(item.data);
-                            return (
-                                <View style={styles.postView}>
-                                    <Text>
-                                        {item.content}
-                                    </Text>
-                                    <Text/>
-                                    <Text style={{fontWeight: 'bold'}}>
-                                        Posted to {item.platform}
-                                    </Text>
-                                </View>
-                            )
-                        }}
-                        keyExtractor={ (item, index) => index }
-                    />
+                    ]}
+                    renderSectionHeader={({ section }) => {
+                        return (
+                            <View style={styles.headerView}>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: wp('5%'), marginVertical: hp('1%') }}>{section.title}</Text>
+                            </View>
+                        );
+                    }}
+                    renderItem={({ item }) => {
+                        console.log(item.data);
+                        return (
+                            <View style={styles.postView}>
+                                <Text>
+                                    {item.content}
+                                </Text>
+                                <Text />
+                                <Text style={{ fontWeight: 'bold' }}>
+                                    Posted to {item.platform}
+                                </Text>
+                            </View>
+                        )
+                    }}
+                    keyExtractor={(item, index) => index}
+                />
+                <ActionButton buttonColor="rgba(231,76,60,1)">
+                    <ActionButton.Item buttonColor='#9b59b6' title="New Post" onPress={() => this.props.navigation.navigate('CreatePost')}>
+                        <Icon name="md-create" style={{ fontSize: wp('7%'), height: hp('4%'), color: 'white' }} />
+                    </ActionButton.Item>
+                </ActionButton>
             </View>
         );
     }

@@ -3,24 +3,23 @@ import {Platform, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-n
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
-export default class SucessPostScreen extends React.Component {
+export default class HomeScreen extends React.Component {
     static navigationOptions = {
-        header: null
+        title: 'Profile'
     }
 
     render() {
         return(
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                <Image style={styles.image} source={require('../assets/success_icon.png')}/>
-                <Text style={{color: '#457EED', fontSize: wp('7%')}}>Upload Complete</Text>
-                <Text style={{color: '#457EED', fontSize: wp('4%')}}>Congrats! Your upload is successfully done</Text>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.props.navigation.navigate('PostHistory')}
-                    >
-                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> OK </Text>
-                    </TouchableOpacity>
+                    <Image style={styles.image} source={require('../assets/placeholder_avatar.png')}/>
+                    <Text style={styles.text}>
+                        Name: Patrick Woo
+                    </Text>
+                    <Text style={styles.text}>
+                        Email: patrickwoo@gmail.com
+                    </Text>
+                    <Text style={{fontSize:wp('3%'), color: '#999999', textAlign: 'center',}}>(not editable)</Text>
                 </View>
             </View>
         );
@@ -41,21 +40,25 @@ const styles = StyleSheet.create({
         borderRadius: wp('5%'),
         paddingVertical: hp('5%'),
         marginHorizontal: wp('5%'),
-        width: wp('90%'),
-        height: hp('80%')
+        width: wp('90%')
+    },
+    text: {
+        color: '#999999',
+        fontSize: wp('5%'),
+        padding: wp('3%'),
+        textAlign: 'center',
     },
     button: {
         borderRadius: wp('10%'),
-        backgroundColor: '#00FFD1',
+        backgroundColor: '#457EED',
         padding: wp('3%'),
         marginTop: hp('5%'),
         width: wp('70%')
     },
     image: {
-        borderRadius: wp('5%'),
-        marginBottom: hp('7%'),
-        width: wp('55%'),
-        height: hp('25%'),
+        width: hp('60%'),
+        height: hp('40%'),
         resizeMode: 'contain'
     },
+
 });

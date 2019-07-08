@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Platform, TextInput, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, { Component } from 'react';
+import { Platform, TextInput, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 
 export default class ForgotAccountScreen extends React.Component {
@@ -9,20 +9,32 @@ export default class ForgotAccountScreen extends React.Component {
     }
 
     render() {
-        return(
+        return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                <Text style={{color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%')}}>Please enter your email</Text>
-                <TextInput style={styles.input}
+                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please enter your email</Text>
+                    <TextInput style={styles.input}
                     // onChangeText={(email) => this.setState({email})}
                     // value={this.state.email}
                     />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => this.props.navigation.navigate('CheckEmail')}
-                >
-                    <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Reset Password </Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.props.navigation.navigate('CheckEmail')}
+                    >
+                        <Text style={{ color: 'white', fontSize: wp('5%'), textAlign: 'center' }}> Reset Password </Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                        <Text style={{ color: '#999999' }}>
+                            Already remember your account?
+                        </Text>
+                        <Text> </Text>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Login')}>
+                            <Text style={{ color: '#457EED' }}>
+                                Login
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );

@@ -3,51 +3,36 @@ import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'rea
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
-export default class LoginScreen extends React.Component {
+export default class ChangePassword extends React.Component {
     static navigationOptions = {
-        header: null
+        title: 'Change Password'
     }
-
     render() {
         return(
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                    <Text style={{color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%')}}>Please Login</Text>
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Email</Text>
+                    <Text style={{color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%')}}>Change Password</Text>
+                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Current Password</Text>
                     <TextInput style={styles.input}
                     // onChangeText={(email) => this.setState({email})}
                     // value={this.state.email}
                     />
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Password</Text>
+                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>New Password</Text>
+                    <TextInput style={styles.input}
+                    // onChangeText={(password) => this.setState({password})}
+                    // value={this.state.password}
+                    />
+                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Confirm New Password</Text>
                     <TextInput style={styles.input}
                     // onChangeText={(password) => this.setState({password})}
                     // value={this.state.password}
                     />
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('ForgotAccount')}
-                    >
-                        <Text style={{color: '#457EED'}}>
-                            Forgot your password?
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
                         style={styles.button}
                         onPress={() => this.props.navigation.navigate('PostHistory')}
                     >
-                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Login </Text>
+                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Save </Text>
                     </TouchableOpacity>
-                    <View style={{flexDirection: 'row', marginTop: hp('2%')}}>
-                        <Text style={{color: '#999999'}}>
-                            Don't have an account? 
-                        </Text>
-                        <Text> </Text>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateAccount')}>
-                            <Text style={{color: '#457EED'}}>
-                                Sign up
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </View>
         );

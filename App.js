@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import { createSwitchNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import { createSwitchNavigator, createStackNavigator, createAppContainer, createDrawerNavigator, SafeAreaView, DrawerNavigator} from "react-navigation";
 import HomeScreen from './src/HomeScreen';
 import LoginScreen from './src/LoginScreen';
 import CreateAccountScreen from './src/CreateAccountScreen';
@@ -18,12 +18,26 @@ import WelcomeScreen from './src/WelcomeScreen';
 import PostHistoryScreen from './src/PostHistoryScreen';
 import CreatePostScreen from './src/CreatePostScreen';
 import SuccessPostScreen from './src/SuccessPost';
+import DrawerContentComponents from './src/DrawerContentComponents';
+import ChangePassword from './src/ChangePassword';
+import Profile from './src/Profile';
 
-const welcomeHistoryCreateStack = createStackNavigator({
-  WelcomeScreen: WelcomeScreen,
+
+const PostHistoryStack = createStackNavigator({
   PostHistory: PostHistoryScreen,
-  CreatePost: CreatePostScreen
+  CreatePost: CreatePostScreen,
+  WelcomeScreen: WelcomeScreen,
+  ChangePassword: ChangePassword,
+  Profile: Profile
 });
+
+// OMG place MyDrawerNavigator after PostHistoryStack
+const MyDrawerNavigator = createDrawerNavigator({ 
+  PostHistory: PostHistoryStack
+},
+{
+  contentComponent: DrawerContentComponents
+})
 
 export default createAppContainer(createSwitchNavigator(
   {
@@ -34,7 +48,7 @@ export default createAppContainer(createSwitchNavigator(
     ForgotAccount: ForgotAccountScreen,
     CheckEmail: CheckEmailScreen,
     SuccessPost: SuccessPostScreen,
-    welcomeHistoryCreate: welcomeHistoryCreateStack,
+    MyDrawer: MyDrawerNavigator
   },
   {
     initialRouteName: 'Home'

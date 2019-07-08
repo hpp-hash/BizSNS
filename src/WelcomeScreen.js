@@ -5,19 +5,12 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
-        header: null
+        title: 'Configure SNS'
     }
-
     render() {
         return(
-            <View style={styles.container}>
+            // <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                    <View style={{flexDirection: 'row'}}>
-                        <Image style={{width: wp('12%'), height: hp('7%')}} source={require('../assets/placeholder_avatar.png')}/>
-                        <Text style={[styles.text, {fontSize: wp('8%')}]}>
-                            Welcome, Patrick.
-                        </Text>
-                    </View>
                     <Text style={[styles.text, {color: 'black'}]}>
                         What platforms would you like to post your message?
                     </Text>
@@ -32,22 +25,8 @@ export default class HomeScreen extends React.Component {
                     <View style={{flexDirection: 'row', margin: wp('5%')}}>
                         <Image style={styles.image} source={require('../assets/instagram.png')}/>
                     </View>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => this.props.navigation.navigate('PostHistory')}
-                        >
-                            <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> View Past Post </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => this.props.navigation.navigate('CreatePost')}
-                        >
-                            <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Create Post </Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
-            </View>
+            // </View>
         );
     }
 }
