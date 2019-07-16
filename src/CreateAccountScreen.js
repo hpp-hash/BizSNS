@@ -1,11 +1,54 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import firebase from 'firebase';
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
         header: null
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {fullName: '', email: '', password: '', confirmPassword: ''}
+    }
+
+    onButtonPress() {
+        const { fullName, email, password, confirmPassword } = this.state;
+        if (fullName != "" && email != "" && password != "" && confirmPassword != "") {
+            if (password != confirmPassword) {
+                this.setState({
+                    error: "Password does not match."
+                })
+            }
+            else{
+                firebase.firestore().collection("users").add({
+                    fullName: fullName,
+                    email: email,
+                    password: password,
+                })
+                .then( function(docRef) {
+                    console.log("document written with ID: ", docRef.id)
+                })
+                .catch(function(error) {
+                    console.log("Error adding document: ", error);
+                })
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    this.props.navigation.navigate('VerifyEmail')
+                })
+                .catch((error) => {
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
+                    let errorCodeMessage = errorCode + " - " + errorMessage;
+                    this.setState({ error: errorCodeMessage})
+                  });
+            }
+        }
+        else{
+            let self = this;
+            setTimeout(function () { self.setState({ error: "One of the required inputs is empty"}) }, 100);
+        }
     }
 
     render() {
@@ -15,27 +58,32 @@ export default class LoginScreen extends React.Component {
                     <Text style={{color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%')}}>Create Account</Text>
                     <Text style={{color: '#999999', marginBottom: hp('1%')}}>Full Name</Text>
                     <TextInput style={styles.input}
-                    // onChangeText={(email) => this.setState({email})}
-                    // value={this.state.email}
+                    onChangeText={(fullName) => this.setState({fullName})}
+                    value={this.state.fullName}
                     />
                     <Text style={{color: '#999999', marginBottom: hp('1%')}}>Email</Text>
                     <TextInput style={styles.input}
-                    // onChangeText={(email) => this.setState({email})}
-                    // value={this.state.email}
+                    onChangeText={(email) => this.setState({email})}
+                    value={this.state.email}
+                    autoCapitalize='none'
                     />
                     <Text style={{color: '#999999', marginBottom: hp('1%')}}>Password</Text>
                     <TextInput style={styles.input}
-                    // onChangeText={(password) => this.setState({password})}
-                    // value={this.state.password}
+                    onChangeText={(password) => this.setState({password})}
+                    value={this.state.password}
+                    secureTextEntry={true}
+                    autoCapitalize='none'
                     />
                     <Text style={{color: '#999999', marginBottom: hp('1%')}}>Confirm Password</Text>
                     <TextInput style={styles.input}
-                    // onChangeText={(password) => this.setState({password})}
-                    // value={this.state.password}
+                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+                    value={this.state.confirmPassword}
+                    secureTextEntry={true}
+                    autoCapitalize='none'
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => this.props.navigation.navigate('VerifyEmail')}
+                        onPress={this.onButtonPress.bind(this)}
                     >
                         <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Sign Up </Text>
                     </TouchableOpacity>
@@ -51,6 +99,9 @@ export default class LoginScreen extends React.Component {
                             </Text>
                         </TouchableOpacity>
                     </View>
+                    <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
+                        {this.state.error}
+                    </Text>
                 </View>
             </View>
         );

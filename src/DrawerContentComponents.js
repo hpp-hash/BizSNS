@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {NavigationActions, SafeAreaView} from 'react-navigation';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import firebase from 'firebase';
 
 export default class drawerContentComponents extends Component {
     navigateToScreen = ( route ) => (() => {
@@ -39,7 +40,10 @@ export default class drawerContentComponents extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{margin: hp('1%')}}
-                        onPress={() => this.props.navigation.navigate('Login')}
+                        onPress={() => {
+                            firebase.auth().signOut();
+                            this.props.navigation.navigate('Login');
+                        }}
                     >
                         <Text style={{fontSize: wp('5%'), textAlign: 'center'}}> Logout </Text>
                     </TouchableOpacity>
