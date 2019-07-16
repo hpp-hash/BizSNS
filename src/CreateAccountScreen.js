@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableOpacity} from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
 
 export default class LoginScreen extends React.Component {
@@ -10,91 +10,127 @@ export default class LoginScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {fullName: '', email: '', password: '', confirmPassword: ''}
+        this.state = { fullName: '', email: '', password: '', confirmPassword: '', loading: false }
     }
 
     onButtonPress() {
-        const { fullName, email, password, confirmPassword } = this.state;
-        if (fullName != "" && email != "" && password != "" && confirmPassword != "") {
-            if (password != confirmPassword) {
-                this.setState({
-                    error: "Password does not match."
-                })
+        this.setState({ error: '', loading: true })
+        let self = this;
+        setTimeout(function () { 
+            const { fullName, email, password, confirmPassword} = self.state;
+            if (fullName != "" && email != "" && password != "" && confirmPassword != "") {
+                if (password != confirmPassword) {
+                    self.setState({
+                        fullName: '', email: '', password: '', confirmPassword: '', loading: false
+                    })
+                    
+                    // let self = this;
+                    setTimeout(function () { self.setState({ error: "Password does not match." }) }, 100);
+    
+                }
+                else {
+                    firebase.auth().createUserWithEmailAndPassword(email, password)
+                        .then(() => {
+                            firebase.firestore().collection("users").add({
+                                fullName: fullName,
+                                email: email,
+                                password: password,
+                            })
+                                .then(function (docRef) {
+                                    console.log("document written with ID: ", docRef.id)
+                                })
+                                .catch(function (error) {
+                                    self.setState({
+                                        fullName: '', email: '', password: '', confirmPassword: '', error: '', loading: false
+                                    })
+                                    console.log("Error adding document: ", error);
+                                })
+                            self.props.navigation.navigate('VerifyEmail')
+                        })
+                        .catch((error) => {
+                            let errorCode = error.code;
+                            let errorMessage = error.message;
+                            let errorCodeMessage = errorCode + " - " + errorMessage;
+                            self.setState({
+                                fullName: '', email: '', password: '', confirmPassword: '', loading: false
+                            })
+    
+                            // let self = this;
+                            setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
+                
+                        });
+                }
             }
-            else{
-                firebase.firestore().collection("users").add({
-                    fullName: fullName,
-                    email: email,
-                    password: password,
+            else {
+                self.setState({
+                    fullName: '', email: '', password: '', confirmPassword: '', loading: false
                 })
-                .then( function(docRef) {
-                    console.log("document written with ID: ", docRef.id)
-                })
-                .catch(function(error) {
-                    console.log("Error adding document: ", error);
-                })
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then(() => {
-                    this.props.navigation.navigate('VerifyEmail')
-                })
-                .catch((error) => {
-                    let errorCode = error.code;
-                    let errorMessage = error.message;
-                    let errorCodeMessage = errorCode + " - " + errorMessage;
-                    this.setState({ error: errorCodeMessage})
-                  });
+    
+                // let self = this;
+                setTimeout(function () { self.setState({ error: "One of the required fields is empty." }) }, 100);
+    
             }
-        }
-        else{
-            let self = this;
-            setTimeout(function () { self.setState({ error: "One of the required inputs is empty"}) }, 100);
-        }
+        }, 100);
+
+    }
+
+    renderButton() {
+        if (this.state.loading)
+            return (
+                <View style={styles.spinnerStyle}>
+                    <ActivityIndicator style={{ paddingTop: hp('2%') }} size={"small"} />
+                </View>
+            );
+
+        return (
+            <TouchableOpacity
+                style={styles.button}
+                onPress={this.onButtonPress.bind(this)}
+            >
+                <Text style={{ color: 'white', fontSize: wp('5%'), textAlign: 'center' }}> Sign Up </Text>
+            </TouchableOpacity>
+        )
     }
 
     render() {
-        return(
+        return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                    <Text style={{color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%')}}>Create Account</Text>
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Full Name</Text>
+                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Create Account</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Full Name</Text>
                     <TextInput style={styles.input}
-                    onChangeText={(fullName) => this.setState({fullName})}
-                    value={this.state.fullName}
+                        onChangeText={(fullName) => this.setState({ fullName })}
+                        value={this.state.fullName}
                     />
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Email</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
                     <TextInput style={styles.input}
-                    onChangeText={(email) => this.setState({email})}
-                    value={this.state.email}
-                    autoCapitalize='none'
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                        autoCapitalize='none'
                     />
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Password</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
                     <TextInput style={styles.input}
-                    onChangeText={(password) => this.setState({password})}
-                    value={this.state.password}
-                    secureTextEntry={true}
-                    autoCapitalize='none'
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
                     />
-                    <Text style={{color: '#999999', marginBottom: hp('1%')}}>Confirm Password</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
                     <TextInput style={styles.input}
-                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}
-                    value={this.state.confirmPassword}
-                    secureTextEntry={true}
-                    autoCapitalize='none'
+                        onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                        value={this.state.confirmPassword}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
                     />
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.onButtonPress.bind(this)}
-                    >
-                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Sign Up </Text>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row', marginTop: hp('2%')}}>
-                        <Text style={{color: '#999999'}}>
+                    {this.renderButton()}
+                    <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                        <Text style={{ color: '#999999' }}>
                             Already have an account?
                         </Text>
                         <Text> </Text>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Login')}>
-                            <Text style={{color: '#457EED'}}>
+                            <Text style={{ color: '#457EED' }}>
                                 Login
                             </Text>
                         </TouchableOpacity>
