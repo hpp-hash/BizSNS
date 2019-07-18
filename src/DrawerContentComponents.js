@@ -41,7 +41,11 @@ export default class drawerContentComponents extends Component {
                     <TouchableOpacity
                         style={{margin: hp('1%')}}
                         onPress={() => {
-                            firebase.auth().signOut();
+                            firebase.auth().onAuthStateChanged(function(user) {
+                                if (user) {
+                                    firebase.auth().signOut;
+                                } 
+                              });
                             this.props.navigation.navigate('Login');
                         }}
                     >

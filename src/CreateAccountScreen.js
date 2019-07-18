@@ -24,14 +24,25 @@ export default class LoginScreen extends React.Component {
                         fullName: '', email: '', password: '', confirmPassword: '', loading: false
                     })
                     
-                    // let self = this;
                     setTimeout(function () { self.setState({ error: "Password does not match." }) }, 100);
     
                 }
                 else {
                     firebase.auth().createUserWithEmailAndPassword(email, password)
                         .then(() => {
-                            firebase.firestore().collection("users").add({
+                            firebase.auth().onAuthStateChanged(function(user){
+                                user.sendEmailVerification().catch(function(error){
+                                    let errorCode = error.code;
+                                    let errorMessage = error.message;
+                                    let errorCodeMessage = errorCode + " - " + errorMessage;
+                                    self.setState({
+                                        fullName: '', email: '', password: '', confirmPassword: '', loading: false
+                                    })
+            
+                                    setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
+                                });
+                            });
+                            firebase.firestore().collection("users").doc(email).set({
                                 fullName: fullName,
                                 email: email,
                                 password: password,
@@ -40,10 +51,13 @@ export default class LoginScreen extends React.Component {
                                     console.log("document written with ID: ", docRef.id)
                                 })
                                 .catch(function (error) {
+                                    let errorCode = error.code;
+                                    let errorMessage = error.message;
+                                    let errorCodeMessage = errorCode + " - " + errorMessage;
                                     self.setState({
-                                        fullName: '', email: '', password: '', confirmPassword: '', error: '', loading: false
+                                        fullName: '', email: '', password: '', confirmPassword: '', loading: false
                                     })
-                                    console.log("Error adding document: ", error);
+                                    setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
                                 })
                             self.props.navigation.navigate('VerifyEmail')
                         })
@@ -55,7 +69,6 @@ export default class LoginScreen extends React.Component {
                                 fullName: '', email: '', password: '', confirmPassword: '', loading: false
                             })
     
-                            // let self = this;
                             setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
                 
                         });

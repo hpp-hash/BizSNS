@@ -27,22 +27,39 @@ export default class LoginScreen extends React.Component {
     }
 
     onLoginSuccess() {
-        this.props.navigation.navigate('PostHistory');
-        this.setState({
-            email: '', password: '', error: '', loading: false
-        })
+        const { email, password } = this.state;
+        let self = this;
+        firebase.firestore().collection("users").doc(email).get()
+            .then(function (document) {
+                if (password != document.data()["password"]) {
+                    firebase.firestore().collection("users").doc(email).update({
+                        password: password
+                    })
+                }
+            })
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (!user.emailVerified) {
+                setTimeout(function () { self.setState({ error: "Your email is not verified", loading: false }) }, 100);
+            }
+            else {
+                self.props.navigation.navigate('PostHistory');
+                self.setState({
+                    email: '', password: '', error: '', loading: false
+                })
+            }
+        });
     }
 
     onLoginFailure(errorCode, errorMessage) {
         let errorCodeMessage = "";
         let self = this;
-        if (errorCode == 'auth/invalid-email' || errorCode == 'auth/wrong-password') {
+        if (errorCode == 'auth/invalid-email' || errorCode == 'auth/wrong-password' || errorCode == 'auth/user-not-found') {
             errorCodeMessage = "Invalid email address or password"
         }
         else {
             errorCodeMessage = errorCode + " - " + errorMessage;
         }
-        
+
         setTimeout(function () { self.setState({ error: errorCodeMessage, loading: false }) }, 100);
 
     }
@@ -51,7 +68,7 @@ export default class LoginScreen extends React.Component {
         if (this.state.loading)
             return (
                 <View style={styles.spinnerStyle}>
-                    <ActivityIndicator style={{paddingTop: hp('2%')}} size={"small"} />
+                    <ActivityIndicator style={{ paddingTop: hp('2%') }} size={"small"} />
                 </View>
             );
 

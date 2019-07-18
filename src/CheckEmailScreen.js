@@ -12,7 +12,7 @@ export default class CheckEmailScreen extends React.Component {
         return(
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
-                <Text style={{color: '#457EED', fontSize: wp('7%')}}>Please check your email</Text>
+                <Text style={{paddingHorizontal: wp('2%'), color: '#457EED', fontSize: wp('5%'), textAlign: 'center'}}>If your email account exists, a password reset will be sent to your email</Text>
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => this.props.navigation.navigate('Login')}
