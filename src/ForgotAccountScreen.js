@@ -54,6 +54,7 @@ export default class ForgotAccountScreen extends React.Component {
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     {this.renderButton()}
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>

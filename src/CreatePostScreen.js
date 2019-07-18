@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, TouchableOpacity, TextInput} from 'react-native';
+import {Keyboard, StyleSheet, Text, View, Image, TouchableOpacity, TextInput} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
@@ -13,8 +13,11 @@ export default class CreatePostScreen extends React.Component {
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
                     <TextInput multiline={true}
-                        numberOfLines={100}
+                        multiline={true}
                         placeholder="What's on your mind?"
+                        returnKeyType='done'
+                        blurOnSubmit={true}
+                        onSubmitEditing={()=>{Keyboard.dismiss()}}
                         style={{backgroundColor: "#E8E8E8", width: wp('80%'), height: hp('30%'), borderRadius: wp('1%')}}/>
                     <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity

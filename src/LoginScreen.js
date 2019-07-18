@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -92,6 +92,8 @@ export default class LoginScreen extends React.Component {
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
+                        keyboardType="default"
+                        returnKeyType="done"
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
                     <TextInput style={styles.input}
@@ -99,6 +101,7 @@ export default class LoginScreen extends React.Component {
                         value={this.state.password}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('ForgotAccount')}
