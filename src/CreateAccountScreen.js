@@ -114,12 +114,14 @@ export default class LoginScreen extends React.Component {
                     <TextInput style={styles.input}
                         onChangeText={(fullName) => this.setState({ fullName })}
                         value={this.state.fullName}
+                        returnKeyType='done'
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
                     <TextInput style={styles.input}
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
                     <TextInput style={styles.input}
@@ -127,6 +129,7 @@ export default class LoginScreen extends React.Component {
                         value={this.state.password}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
                     <TextInput style={styles.input}
@@ -134,6 +137,7 @@ export default class LoginScreen extends React.Component {
                         value={this.state.confirmPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     {this.renderButton()}
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>

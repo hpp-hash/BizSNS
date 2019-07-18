@@ -96,6 +96,7 @@ export default class ChangePassword extends React.Component {
                         value={this.state.currentPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>New Password</Text>
                     <TextInput style={styles.input}
@@ -103,6 +104,7 @@ export default class ChangePassword extends React.Component {
                         value={this.state.newPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm New Password</Text>
                     <TextInput style={styles.input}
@@ -110,6 +112,7 @@ export default class ChangePassword extends React.Component {
                         value={this.state.confirmPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
+                        returnKeyType='done'
                     />
                     {this.renderMessage()}
                     {this.renderButton()}
