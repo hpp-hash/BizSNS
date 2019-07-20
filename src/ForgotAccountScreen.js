@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, TextInput, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Platform, TextInput, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
 
@@ -14,17 +14,17 @@ export default class ForgotAccountScreen extends React.Component {
     }
 
     onButtonPress() {
-        const {email} = this.state;
+        const { email } = this.state;
         let self = this;
         this.setState({ loading: true });
         firebase.auth().sendPasswordResetEmail(email)
-        .then(function() {
-            // email sent
-        })
-        .catch(function(error) {
-            console.log(error);
-        })
-        setTimeout(function() {self.props.navigation.navigate('CheckEmail')}, 500)
+            .then(function () {
+                // email sent
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        setTimeout(function () { self.props.navigation.navigate('CheckEmail') }, 500)
     }
 
     renderButton() {
@@ -46,6 +46,7 @@ export default class ForgotAccountScreen extends React.Component {
     }
 
     render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
         return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
@@ -54,8 +55,16 @@ export default class ForgotAccountScreen extends React.Component {
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
+                    <InputAccessoryView nativeID={inputAccessoryViewID}>
+                        <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
+                            <TouchableOpacity style={{ padding: hp('1%'), }}
+                                onPress={Keyboard.dismiss}>
+                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </InputAccessoryView>
                     {this.renderButton()}
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
                         <Text style={{ color: '#999999' }}>
@@ -63,7 +72,7 @@ export default class ForgotAccountScreen extends React.Component {
                         </Text>
                         <Text> </Text>
                         <TouchableOpacity
-                            onPress={this.onButtonPress.bind(this)}>
+                            onPress={() => this.props.navigation.navigate('Login')}>
                             <Text style={{ color: '#457EED' }}>
                                 Login
                             </Text>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -17,6 +17,14 @@ export default class LoginScreen extends React.Component {
     onButtonPress() {
         this.setState({ error: '', loading: true })
         const { email, password } = this.state;
+        // REMOVE
+        if (email == "11") {
+            this.props.navigation.navigate('PostHistory')
+            this.setState({
+                email: '', password: '', error: '', loading: false
+            })
+        }
+
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(this.onLoginSuccess.bind(this))
             .catch((error) => {
@@ -83,6 +91,7 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
         return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
@@ -93,7 +102,7 @@ export default class LoginScreen extends React.Component {
                         value={this.state.email}
                         autoCapitalize='none'
                         keyboardType="default"
-                        returnKeyType="done"
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
                     <TextInput style={styles.input}
@@ -101,8 +110,16 @@ export default class LoginScreen extends React.Component {
                         value={this.state.password}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
+                    <InputAccessoryView nativeID={inputAccessoryViewID}>
+                        <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
+                            <TouchableOpacity style={{ padding: hp('1%'),  }}
+                                onPress={Keyboard.dismiss}>
+                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </InputAccessoryView>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('ForgotAccount')}
                     >

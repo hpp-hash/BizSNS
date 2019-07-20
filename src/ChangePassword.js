@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -58,7 +58,7 @@ export default class ChangePassword extends React.Component {
                     {this.state.info}
                 </Text>);
         }
-        else  {
+        else {
             return (
                 <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
                     {this.state.error}
@@ -86,6 +86,7 @@ export default class ChangePassword extends React.Component {
     }
 
     render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
         return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
@@ -96,7 +97,7 @@ export default class ChangePassword extends React.Component {
                         value={this.state.currentPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>New Password</Text>
                     <TextInput style={styles.input}
@@ -104,7 +105,7 @@ export default class ChangePassword extends React.Component {
                         value={this.state.newPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm New Password</Text>
                     <TextInput style={styles.input}
@@ -112,8 +113,16 @@ export default class ChangePassword extends React.Component {
                         value={this.state.confirmPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
+                    <InputAccessoryView nativeID={inputAccessoryViewID}>
+                        <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
+                            <TouchableOpacity style={{ padding: hp('1%'), }}
+                                onPress={Keyboard.dismiss}>
+                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </InputAccessoryView>
                     {this.renderMessage()}
                     {this.renderButton()}
                 </View>

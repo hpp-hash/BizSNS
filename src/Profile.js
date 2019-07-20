@@ -1,25 +1,42 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
         title: 'Profile'
     }
 
+    constructor(props){
+        super(props);
+        this.state = {
+            fullName: '', email: ''
+        }
+    }
+
+    componentDidMount() {
+        let self = this;
+        firebase.auth().onAuthStateChanged(function(user){
+            let userFullName = user.displayName;
+            let userEmail = user.email;
+            self.setState({ fullName: userFullName, email: userEmail})
+        });
+    }
+
     render() {
+        const {fullName, email} = this.state
         return(
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
                     <Image style={styles.image} source={require('../assets/placeholder_avatar.png')}/>
                     <Text style={styles.text}>
-                        Name: Patrick Woo
+                        Name: {fullName}
                     </Text>
                     <Text style={styles.text}>
-                        Email: patrickwoo@gmail.com
+                        Email: {email}
                     </Text>
-                    <Text style={{fontSize:wp('3%'), color: '#999999', textAlign: 'center',}}>(not editable)</Text>
+                    {/* <Text style={{fontSize:wp('3%'), color: '#999999', textAlign: 'center',}}>(not editable)</Text> */}
                 </View>
             </View>
         );

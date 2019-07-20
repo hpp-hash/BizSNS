@@ -3,6 +3,7 @@ import {NavigationActions, SafeAreaView} from 'react-navigation';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
+import { tsConstructorType } from '@babel/types';
 
 export default class drawerContentComponents extends Component {
     navigateToScreen = ( route ) => (() => {
@@ -10,13 +11,33 @@ export default class drawerContentComponents extends Component {
         this.props.navigation.dispatch(navigateAction);
     })
 
+    constructor(props){
+        super(props);
+        this.state = {
+            firstName: ''
+        }
+    }
+
+    componentDidMount() {
+        let self = this;
+        firebase.auth().onAuthStateChanged(function(user){
+            let firstNameExtract = user.displayName.trim().split(" ")
+            self.setState({ firstName: firstNameExtract[0]})
+        });
+    }
+
+    componentWillUnmount() {
+        this.setState({ firstName: '' })
+    }
+
     render() {
+        const {firstName} = this.state;
         return(
             <SafeAreaView style={{flex:1, paddingTop: hp('10%')}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <Image style={{width: wp('12%'), height: hp('7%')}} source={require('../assets/placeholder_avatar.png')}/>
                     <Text style={[styles.text, {fontSize: wp('6%')}]}>
-                    Welcome, Patrick
+                    Welcome, {firstName}
                     </Text>
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-start', paddingTop: hp('2%'), paddingLeft: wp('5%')}}>

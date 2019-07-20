@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
 
@@ -16,29 +16,34 @@ export default class LoginScreen extends React.Component {
     onButtonPress() {
         this.setState({ error: '', loading: true })
         let self = this;
-        setTimeout(function () { 
-            const { fullName, email, password, confirmPassword} = self.state;
+        setTimeout(function () {
+            const { fullName, email, password, confirmPassword } = self.state;
             if (fullName != "" && email != "" && password != "" && confirmPassword != "") {
                 if (password != confirmPassword) {
                     self.setState({
                         fullName: '', email: '', password: '', confirmPassword: '', loading: false
                     })
-                    
+
                     setTimeout(function () { self.setState({ error: "Password does not match." }) }, 100);
-    
+
                 }
                 else {
                     firebase.auth().createUserWithEmailAndPassword(email, password)
                         .then(() => {
-                            firebase.auth().onAuthStateChanged(function(user){
-                                user.sendEmailVerification().catch(function(error){
+                            firebase.auth().onAuthStateChanged(function (user) {
+                                if (user) {
+                                    user.updateProfile({
+                                        displayName: fullName
+                                    })
+                                }
+                                user.sendEmailVerification().catch(function (error) {
                                     let errorCode = error.code;
                                     let errorMessage = error.message;
                                     let errorCodeMessage = errorCode + " - " + errorMessage;
                                     self.setState({
                                         fullName: '', email: '', password: '', confirmPassword: '', loading: false
                                     })
-            
+
                                     setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
                                 });
                             });
@@ -68,9 +73,9 @@ export default class LoginScreen extends React.Component {
                             self.setState({
                                 fullName: '', email: '', password: '', confirmPassword: '', loading: false
                             })
-    
+
                             setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
-                
+
                         });
                 }
             }
@@ -78,10 +83,10 @@ export default class LoginScreen extends React.Component {
                 self.setState({
                     fullName: '', email: '', password: '', confirmPassword: '', loading: false
                 })
-    
+
                 // let self = this;
                 setTimeout(function () { self.setState({ error: "One of the required fields is empty." }) }, 100);
-    
+
             }
         }, 100);
 
@@ -106,6 +111,7 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
         return (
             <View style={styles.container}>
                 <View style={styles.smallerContainer}>
@@ -114,14 +120,14 @@ export default class LoginScreen extends React.Component {
                     <TextInput style={styles.input}
                         onChangeText={(fullName) => this.setState({ fullName })}
                         value={this.state.fullName}
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
                     <TextInput style={styles.input}
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
                     <TextInput style={styles.input}
@@ -129,7 +135,7 @@ export default class LoginScreen extends React.Component {
                         value={this.state.password}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
                     <TextInput style={styles.input}
@@ -137,8 +143,16 @@ export default class LoginScreen extends React.Component {
                         value={this.state.confirmPassword}
                         secureTextEntry={true}
                         autoCapitalize='none'
-                        returnKeyType='done'
+                        inputAccessoryViewID={inputAccessoryViewID}
                     />
+                    <InputAccessoryView nativeID={inputAccessoryViewID}>
+                        <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
+                            <TouchableOpacity style={{ padding: hp('1%'), }}
+                                onPress={Keyboard.dismiss}>
+                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </InputAccessoryView>
                     {this.renderButton()}
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
                         <Text style={{ color: '#999999' }}>

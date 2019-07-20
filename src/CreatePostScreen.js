@@ -1,55 +1,99 @@
-import React, {Component} from 'react';
-import {Keyboard, StyleSheet, Text, View, Image, TouchableOpacity, TextInput} from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-
+import React, { Component } from 'react';
+import { Keyboard, StyleSheet, Button, Text, View, Image, TouchableOpacity, TextInput, ActivityIndicator, InputAccessoryView } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class CreatePostScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Create Post'
+    constructor(props) {
+        super(props);
+        this.state = {
+            content: '', media: [], loading: false, error: ''
+        }
+    }
+
+    static navigationOptions = ({ navigation }) => {
+        const { params = {} } = navigation.state;
+        return {
+            headerRight:
+                <Button title={"Share"} onPress={params.handleRight} color='#fff' />
+            ,
+            title: 'Create Post',
+            headerStyle: {
+                backgroundColor: '#457EED'
+            },
+            headerTitleStyle: {
+                color: 'white'
+            },
+            headerTintColor: 'white'
+        }
+    }
+
+    shareButtonPress() {
+        this.setState({
+            loading: true
+        })
+
+
+        firebase.firestore().collection("posts").add({
+            content: this.state.content,
+        })
+
+        let self = this;
+            self.setState({ loading: false })
+            self.props.navigation.navigate('SuccessPost')
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({ handleRight: this.shareButtonPress.bind(this) })
+    }
+
+    renderButton() {
+        if (this.state.loading) {
+            return (
+                <View style={styles.spinnerStyle}>
+                    <ActivityIndicator style={{ paddingTop: hp('2%') }} size={"small"} />
+                </View>
+            );
+        }
+
+        return (
+            <TouchableOpacity
+                style={styles.button}
+            >
+                <Text style={{ color: 'white', fontSize: wp('5%'), textAlign: 'center' }}> Share</Text>
+            </TouchableOpacity>
+        );
     }
 
     render() {
-        return(
+        const inputAccessoryViewID = 'inputAccessoryView1';
+        return (
             <View style={styles.container}>
-                <View style={styles.smallerContainer}>
-                    <TextInput multiline={true}
-                        multiline={true}
-                        placeholder="What's on your mind?"
-                        returnKeyType='done'
-                        blurOnSubmit={true}
-                        onSubmitEditing={()=>{Keyboard.dismiss()}}
-                        style={{backgroundColor: "#E8E8E8", width: wp('80%'), height: hp('30%'), borderRadius: wp('1%')}}/>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            style={{backgroundColor: "#E8E8E8", width: wp('35%'), padding: wp('2%'), borderRadius: wp('1%'), margin: wp('3%')}}
-                            // onPress={() => this.props.navigation.navigate('CreatePost')}
-                        >
-                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                <Image 
-                                    style={{width: wp('11%'), height: hp('5%'), resizeMode: 'contain'}}
-                                    source={require('../assets/camera.png')}/>
-                                <Text style={{color: 'black', fontSize: wp('5%'), textAlignVertical: 'center', textAlign: 'right'}}> Image </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{backgroundColor: "#E8E8E8", width: wp('35%'), padding: wp('2%'), borderRadius: wp('1%'), margin: wp('3%')}}
-                            // onPress={() => this.props.navigation.navigate('SuccessPost')}
-                        >
-                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',}}>
-                                <Image 
-                                    style={{width: wp('11%'), height: hp('5%'), resizeMode: 'contain'}}
+                <TextInput
+                    textAlign={'left'}
+                    multiline={true}
+                    numberOfLines={1000}
+                    inputAccessoryViewID={inputAccessoryViewID}
+                    placeholder="What do you want to talk about?"
+                    autoFocus={true}
+                    onChangeText={(content) => this.setState({ content })}
+                    value={this.state.content}
+                    style={{ width: wp('100%'), height: hp('100%'), paddingLeft: wp('5%'), paddingTop: hp('3%') }} />
+                <InputAccessoryView nativeID={inputAccessoryViewID}>
+                    <View style={{ backgroundColor: '#eff0f1', alignItems: 'flex-start' }}>
+                        <TouchableOpacity style={{ padding: hp('1%') }}
+                            onPress={Keyboard.dismiss}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+                                <Image
+                                    style={{ width: wp('5.5%'), height: hp('2.5%'), resizeMode: 'contain' }}
                                     source={require('../assets/video.png')} />
-                                <Text style={{color: 'black', fontSize: wp('5%'), textAlignVertical: 'center', textAlign: 'right'}}> Video</Text>
+                                <Text> </Text>
+                                <Text style={{ color: '#457EED', fontSize: wp('4%') }}>Add Video/Image</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.props.navigation.navigate('SuccessPost')}
-                    >
-                        <Text style={{color: 'white', fontSize: wp('5%'), textAlign: 'center'}}> Share</Text>
-                    </TouchableOpacity>
-                </View>
+                </InputAccessoryView>
             </View>
         );
     }
@@ -58,9 +102,7 @@ export default class CreatePostScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#457EED',
-        justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
     },
     smallerContainer: {
         backgroundColor: 'white',
