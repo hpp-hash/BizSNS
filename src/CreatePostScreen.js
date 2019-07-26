@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Keyboard, StyleSheet, Button, Text, View, Image, TouchableOpacity, TextInput, ActivityIndicator, InputAccessoryView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
-import 'firebase/firestore';
 
 export default class CreatePostScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            content: '', media: [], loading: false, error: ''
+            contentState: '', loading: false, error: '', textDate: '', email: ''
         }
     }
 
@@ -30,22 +29,68 @@ export default class CreatePostScreen extends React.Component {
     }
 
     shareButtonPress() {
-        this.setState({
-            loading: true
-        })
-
-
-        firebase.firestore().collection("posts").add({
-            content: this.state.content,
-        })
 
         let self = this;
-            self.setState({ loading: false })
+        var trigger = false
+        let date = this.state.textDate
+        // let date = "07/27/2019"
+        // let date = "07/28/2019"
+        // let date = "07/29/2019"
+        let databaseArr = []
+
+        firebase.firestore().collection("posts").where("title", "==", date)
+            .get().then(snapshot => {
+                // for collections, use .empty
+                if (!snapshot.empty) {
+                    console.log("title, ==, ", date, " EXISTS")
+                    snapshot.forEach((doc) => {
+                        // for documents, use .exists
+                        if (doc.exists) {
+                            console.log(doc.id, " - ", doc.data())
+                            trigger = true
+                            databaseArr = doc.data()["data"]
+                        }
+                        if (trigger) {
+                            let newContentSameDay = { content: self.state.contentState, platform: "LinkedIn" }
+                            databaseArr.push(newContentSameDay)
+                            console.log("databaseArr=", databaseArr)
+                            firebase.firestore().collection("posts").doc(doc.id).update({
+                                data: databaseArr
+                            })
+                        }
+                        trigger = false
+                    })
+                }
+                else
+                {
+                    console.log("title, ==, ", date, " DOES NOT EXISTS")
+                    let dataPassed = [
+                        { content: this.state.contentState, platform: "LinkedIn" }
+                    ]
+                    firebase.firestore().collection("posts").add({
+                        title: date,
+                        email: this.state.email,
+                        data: dataPassed
+                    });
+                }
+            })
+
             self.props.navigation.navigate('SuccessPost')
     }
 
     componentDidMount() {
         this.props.navigation.setParams({ handleRight: this.shareButtonPress.bind(this) })
+
+        let user = firebase.auth().currentUser;
+        let userEmail = user.email;
+        let d = new Date();
+        let date = d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear();
+
+        this.setState({
+            email: userEmail,
+            textDate: date
+        })
+
     }
 
     renderButton() {
@@ -77,8 +122,8 @@ export default class CreatePostScreen extends React.Component {
                     inputAccessoryViewID={inputAccessoryViewID}
                     placeholder="What do you want to talk about?"
                     autoFocus={true}
-                    onChangeText={(content) => this.setState({ content })}
-                    value={this.state.content}
+                    onChangeText={(contentState) => this.setState({ contentState })}
+                    value={this.state.contentState}
                     style={{ width: wp('100%'), height: hp('100%'), paddingLeft: wp('5%'), paddingTop: hp('3%') }} />
                 <InputAccessoryView nativeID={inputAccessoryViewID}>
                     <View style={{ backgroundColor: '#eff0f1', alignItems: 'flex-start' }}>

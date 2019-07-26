@@ -14,6 +14,18 @@ export default class LoginScreen extends React.Component {
         this.state = { email: '', password: '', error: '', loading: false };
     }
 
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) 
+            {
+                console.log("User is logged in => " + user.displayName + " - " + user.email)
+            }
+            else {
+                console.log("User is signed out.")
+            }
+        })
+    }
+
     onButtonPress() {
         this.setState({ error: '', loading: true })
         const { email, password } = this.state;

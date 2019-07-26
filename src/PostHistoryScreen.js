@@ -1,39 +1,78 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Image, Button, SectionList, TouchableOpacity, MenuImage} from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, Button, SectionList, TouchableOpacity, MenuImage } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { DrawerActions } from 'react-navigation';
+import firebase from 'firebase';
 
 export default class PostHistoryScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Post History',
         headerLeft: (
             <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-                <Image source={require('../assets/hamburger_menu.png')} 
-                style={{
-                    resizeMode: 'contain',
-                    width: wp('13%'),
-                    height: hp('3%'),
-                }}/>
+                <Image source={require('../assets/hamburger_menu.png')}
+                    style={{
+                        resizeMode: 'contain',
+                        width: wp('13%'),
+                        height: hp('3%'),
+                    }} />
             </TouchableOpacity>
         )
     });
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            dataRetrieved: []
+        }
+    }
+
+    componentDidMount() {
+        var user = firebase.auth().currentUser;
+        let userEmail = user.email
+        let self = this
+
+        let localDict = {}
+        let localArr = []
+
+        firebase.firestore().collection("posts").where("email", "==", userEmail)
+        .get().then(function (querySnapshot) {
+            if (querySnapshot.empty) {
+                console.log("email, ==, ", userEmail, " EMPTY")
+            }
+            else {
+                querySnapshot.forEach((doc) => {
+                    localDict = {
+                        "title": doc.data()["title"],
+                        "data": doc.data()["data"]
+                    }
+                    localArr.push(localDict)
+                    console.log(localDict)
+                    console.log(localArr)
+                    self.setState({
+                        dataRetrieved: localArr
+                    })
+                })
+            }
+        })
+        .catch(function(error) {
+            console.log("Error getting documents: ", error);
+        });
+    }
+
     render() {
+        const { dataRetrieved } = this.state
+        console.log(dataRetrieved);
         return (
             <View style={styles.container}>
                 <SectionList
-                    sections={[
-                        { title: 'July 1st, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter, Instagram, LinkedIn, Pinterest' }, { content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, Twitter' },] },
-                        { title: 'July 2nd, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook' }] },
-                        { title: 'July 3rd, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter' }] },
-                        { title: 'July 4th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Facebook, LinkedIn, Instagram, Twitter' }] },
-                        { title: 'July 5th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'Pinterest, Twitter, Instagram' }] },
-                        { title: 'July 6th, 2019', data: [{ content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', platform: 'LinkedIn, Twitter, Pinterest' }] },
-
-                    ]}
+                    // sections={[
+                    //     {title: "07-26-2019", data: [{content: "Hello World", platform: "Facebook"}, {content: "Love you", platform:"LinkedIn"}]},
+                    // ]}
+                    sections={dataRetrieved}
                     renderSectionHeader={({ section }) => {
+                        console.log("section = ", section)
                         return (
                             <View style={styles.headerView}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: wp('5%'), marginVertical: hp('1%') }}>{section.title}</Text>
@@ -41,7 +80,7 @@ export default class PostHistoryScreen extends React.Component {
                         );
                     }}
                     renderItem={({ item }) => {
-                        console.log(item.data);
+                        console.log("item = ", item);
                         return (
                             <View style={styles.postView}>
                                 <Text>
@@ -71,7 +110,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#457EED',
         justifyContent: 'center',
-        alignItems: 'center',
+        // alignItems: 'center',
     },
     smallerContainer: {
         backgroundColor: 'white',

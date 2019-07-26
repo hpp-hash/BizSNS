@@ -3,7 +3,6 @@ import {NavigationActions, SafeAreaView} from 'react-navigation';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
-import { tsConstructorType } from '@babel/types';
 
 export default class drawerContentComponents extends Component {
     navigateToScreen = ( route ) => (() => {
@@ -21,7 +20,11 @@ export default class drawerContentComponents extends Component {
     componentDidMount() {
         let self = this;
         firebase.auth().onAuthStateChanged(function(user){
-            let firstNameExtract = user.displayName.trim().split(" ")
+            console.log("user.displayName = ", user.displayName)
+            let firstNameExtract = ""
+            if (user.displayName != undefined) {
+                firstNameExtract = user.displayName.trim().split(" ")
+            }
             self.setState({ firstName: firstNameExtract[0]})
         });
     }
@@ -62,11 +65,12 @@ export default class drawerContentComponents extends Component {
                     <TouchableOpacity
                         style={{margin: hp('1%')}}
                         onPress={() => {
-                            firebase.auth().onAuthStateChanged(function(user) {
-                                if (user) {
-                                    firebase.auth().signOut;
-                                } 
-                              });
+                            firebase.auth().signOut().then(function() {
+                                console.log("Successfully removing user from firebase")
+                            }).catch(function(error) {
+                                console.log("Error removing user from firebase")
+                                console.log("User is still logged in?? => " + user.displayName + " - " + user.email)
+                            })
                             this.props.navigation.navigate('Login');
                         }}
                     >

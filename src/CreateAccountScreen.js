@@ -30,22 +30,28 @@ export default class LoginScreen extends React.Component {
                 else {
                     firebase.auth().createUserWithEmailAndPassword(email, password)
                         .then(() => {
-                            firebase.auth().onAuthStateChanged(function (user) {
-                                if (user) {
-                                    user.updateProfile({
-                                        displayName: fullName
-                                    })
-                                }
-                                user.sendEmailVerification().catch(function (error) {
-                                    let errorCode = error.code;
-                                    let errorMessage = error.message;
-                                    let errorCodeMessage = errorCode + " - " + errorMessage;
-                                    self.setState({
-                                        fullName: '', email: '', password: '', confirmPassword: '', loading: false
-                                    })
+                            var user = firebase.auth().currentUser;
+                            user.updateProfile({
+                                displayName: fullName
+                            }).then(() => {
+                                console.log("Successfully update displayName")
+                                console.log("fullName=" + fullName)
+                                console.log("displayName = " + user.displayName)
+                            }).catch(() => {
+                                console.log("Failed to update displayName")
+                                console.log("fullName=" + fullName)
+                                console.log("displayName = " + user.displayName)
+                            })
 
-                                    setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
-                                });
+                            user.sendEmailVerification().catch(function (error) {
+                                let errorCode = error.code;
+                                let errorMessage = error.message;
+                                let errorCodeMessage = errorCode + " - " + errorMessage;
+                                self.setState({
+                                    fullName: '', email: '', password: '', confirmPassword: '', loading: false
+                                })
+
+                                setTimeout(function () { self.setState({ error: errorCodeMessage }) }, 100);
                             });
                             firebase.firestore().collection("users").doc(email).set({
                                 fullName: fullName,
@@ -121,6 +127,7 @@ export default class LoginScreen extends React.Component {
                         onChangeText={(fullName) => this.setState({ fullName })}
                         value={this.state.fullName}
                         inputAccessoryViewID={inputAccessoryViewID}
+                        autoCorrect={false}
                     />
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
                     <TextInput style={styles.input}

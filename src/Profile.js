@@ -15,7 +15,7 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         let self = this;
         firebase.auth().onAuthStateChanged(function(user){
             let userFullName = user.displayName;
