@@ -63,8 +63,7 @@ export default class CreatePostScreen extends React.Component {
                         trigger = false
                     })
                 }
-                else
-                {
+                else {
                     console.log("title, ==, ", date, " DOES NOT EXISTS")
                     let dataPassed = [
                         { content: this.state.contentState, platform: "LinkedIn" }
@@ -77,7 +76,7 @@ export default class CreatePostScreen extends React.Component {
                 }
             })
 
-            self.props.navigation.navigate('SuccessPost')
+        self.props.navigation.navigate('SuccessPost')
     }
 
     componentDidMount() {
@@ -117,8 +116,8 @@ export default class CreatePostScreen extends React.Component {
         const options = {
             title: 'Select options',
             chooseFromLibraryButtonTitle: 'Choose from Library',
-            cancelButtonTitle: 'Cancel'	
-          };
+            cancelButtonTitle: 'Cancel'
+        };
 
         ImagePicker.launchImageLibrary(options, (response) => {
             console.log('Response = ', response);
@@ -138,7 +137,7 @@ export default class CreatePostScreen extends React.Component {
                 // avatarSource: source,
                 // });
             }
-          });
+        });
     }
 
     render() {
@@ -156,17 +155,25 @@ export default class CreatePostScreen extends React.Component {
                     value={this.state.contentState}
                     style={{ width: wp('100%'), height: hp('100%'), paddingLeft: wp('5%'), paddingTop: hp('3%') }} />
                 <InputAccessoryView nativeID={inputAccessoryViewID}>
-                    <View style={{ backgroundColor: '#eff0f1', alignItems: 'flex-start' }}>
-                        <TouchableOpacity style={{ padding: hp('1%') }}
-                            onPress={this.accessPhotoButtonnPress.bind(this)}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
-                                <Image
-                                    style={{ width: wp('5.5%'), height: hp('2.5%'), resizeMode: 'contain' }}
-                                    source={require('../assets/video.png')} />
-                                <Text> </Text>
-                                <Text style={{ color: '#457EED', fontSize: wp('4%') }}>Add Video/Image</Text>
-                            </View>
-                        </TouchableOpacity>
+                    <View style={{ backgroundColor: '#eff0f1', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{justifyContent: 'flex-start'}}>
+                            <TouchableOpacity style={{ padding: hp('1%') }}
+                                onPress={this.accessPhotoButtonnPress.bind(this)}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+                                    <Image
+                                        style={{ width: wp('5.5%'), height: hp('2.5%'), resizeMode: 'contain' }}
+                                        source={require('../assets/video.png')} />
+                                    <Text> </Text>
+                                    <Text style={{ color: '#457EED', fontSize: wp('4%') }}>Add Video/Image</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ justifyContent: 'flex-end'}}>
+                            <TouchableOpacity style={{ padding: hp('1%')}}
+                                onPress={Keyboard.dismiss}>
+                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </InputAccessoryView>
             </View>
