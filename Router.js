@@ -20,7 +20,6 @@ import SuccessPostScreen from './src/SuccessPost';
 import DrawerContentComponents from './src/DrawerContentComponents';
 import ChangePassword from './src/ChangePassword';
 import Profile from './src/Profile';
-import * as firebase from "firebase";
 
 const PostHistoryStack = createStackNavigator({
   PostHistory: PostHistoryScreen,

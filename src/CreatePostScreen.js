@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Keyboard, StyleSheet, Button, Text, View, Image, TouchableOpacity, TextInput, ActivityIndicator, InputAccessoryView } from 'react-native';
+import { Keyboard, CameraRoll, StyleSheet, Button, Text, View, Image, TouchableOpacity, TextInput, ActivityIndicator, InputAccessoryView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import firebase from 'firebase';
+import ImagePicker from 'react-native-image-picker';
+
 
 export default class CreatePostScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            contentState: '', loading: false, error: '', textDate: '', email: ''
+            media: [], contentState: '', loading: false, error: '', textDate: '', email: ''
         }
     }
 
@@ -111,6 +113,34 @@ export default class CreatePostScreen extends React.Component {
         );
     }
 
+    accessPhotoButtonnPress() {
+        const options = {
+            title: 'Select options',
+            chooseFromLibraryButtonTitle: 'Choose from Library',
+            cancelButtonTitle: 'Cancel'	
+          };
+
+        ImagePicker.launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                // this.setState({
+                // avatarSource: source,
+                // });
+            }
+          });
+    }
+
     render() {
         const inputAccessoryViewID = 'inputAccessoryView1';
         return (
@@ -128,7 +158,7 @@ export default class CreatePostScreen extends React.Component {
                 <InputAccessoryView nativeID={inputAccessoryViewID}>
                     <View style={{ backgroundColor: '#eff0f1', alignItems: 'flex-start' }}>
                         <TouchableOpacity style={{ padding: hp('1%') }}
-                            onPress={Keyboard.dismiss}>
+                            onPress={this.accessPhotoButtonnPress.bind(this)}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
                                 <Image
                                     style={{ width: wp('5.5%'), height: hp('2.5%'), resizeMode: 'contain' }}

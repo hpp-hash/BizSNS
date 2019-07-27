@@ -2,12 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to access your Camera Roll</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to access your Camera Roll</string>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>$(PRODUCT_NAME) would like to access your location</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>BizSNS would like to use your microphone (for videos)</string>
+  <key>NSCameraUsageDescription</key>
+  <string>BizSNS would like to access your camera</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>BizSNS would like to save photos to your photo gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>BizSNS would like to access your photo gallery</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>BizSNS would like to access your location</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -44,9 +48,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Press OK to allow</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>BizSNS would like to access your location</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
