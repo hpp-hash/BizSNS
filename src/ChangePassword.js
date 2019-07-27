@@ -85,10 +85,9 @@ export default class ChangePassword extends React.Component {
         );
     }
 
-    render() {
-        const inputAccessoryViewID = 'inputAccessoryView1';
-        return (
-            <View style={styles.container}>
+    renderView(inputAccessoryViewID) {
+        if (Platform.OS == 'ios') {
+            return (
                 <View style={styles.smallerContainer}>
                     <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Change Password</Text>
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Current Password</Text>
@@ -126,6 +125,45 @@ export default class ChangePassword extends React.Component {
                     {this.renderMessage()}
                     {this.renderButton()}
                 </View>
+            );
+        }
+        else if (Platform.OS == 'android') {
+            return (
+                <View style={styles.smallerContainer}>
+                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Change Password</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Current Password</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(currentPassword) => this.setState({ currentPassword })}
+                        value={this.state.currentPassword}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
+                    />
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>New Password</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(newPassword) => this.setState({ newPassword })}
+                        value={this.state.newPassword}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
+                    />
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm New Password</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                        value={this.state.confirmPassword}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
+                    />
+                    {this.renderMessage()}
+                    {this.renderButton()}
+                </View>
+            );
+        }
+    }
+
+    render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
+        return (
+            <View style={styles.container}>
+                {this.renderView(inputAccessoryViewID)}
             </View>
         );
     }

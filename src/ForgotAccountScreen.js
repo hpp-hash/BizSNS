@@ -45,10 +45,9 @@ export default class ForgotAccountScreen extends React.Component {
         )
     }
 
-    render() {
-        const inputAccessoryViewID = 'inputAccessoryView1';
-        return (
-            <View style={styles.container}>
+    renderView(inputAccessoryViewID) {
+        if (Platform.OS == 'ios') {
+            return (
                 <View style={styles.smallerContainer}>
                     <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please enter your email</Text>
                     <TextInput style={styles.input}
@@ -69,16 +68,50 @@ export default class ForgotAccountScreen extends React.Component {
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
                         <Text style={{ color: '#999999' }}>
                             Already remember your account?
-                        </Text>
+                    </Text>
                         <Text> </Text>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Login')}>
                             <Text style={{ color: '#457EED' }}>
                                 Login
-                            </Text>
+                        </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
+            );
+        }
+        else if (Platform.OS = 'android') {
+            return (
+                <View style={styles.smallerContainer}>
+                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please enter your email</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                        autoCapitalize='none'
+                    />
+                    {this.renderButton()}
+                    <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                        <Text style={{ color: '#999999' }}>
+                            Already remember your account?
+                </Text>
+                        <Text> </Text>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Login')}>
+                            <Text style={{ color: '#457EED' }}>
+                                Login
+                    </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+    }
+
+    render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
+        return (
+            <View style={styles.container}>
+                {this.renderView(inputAccessoryViewID)}
             </View>
         );
     }

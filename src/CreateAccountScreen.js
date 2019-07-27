@@ -116,68 +116,127 @@ export default class LoginScreen extends React.Component {
         )
     }
 
+    renderView(inputAccessoryViewID) {
+        if (Platform.OS == 'ios') {
+            return (
+                <View style={styles.container}>
+                    <View style={styles.smallerContainer}>
+                        <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Create Account</Text>
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Full Name</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(fullName) => this.setState({ fullName })}
+                            value={this.state.fullName}
+                            inputAccessoryViewID={inputAccessoryViewID}
+                            autoCorrect={false}
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(email) => this.setState({ email })}
+                            value={this.state.email}
+                            autoCapitalize='none'
+                            inputAccessoryViewID={inputAccessoryViewID}
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(password) => this.setState({ password })}
+                            value={this.state.password}
+                            secureTextEntry={true}
+                            autoCapitalize='none'
+                            inputAccessoryViewID={inputAccessoryViewID}
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                            value={this.state.confirmPassword}
+                            secureTextEntry={true}
+                            autoCapitalize='none'
+                            inputAccessoryViewID={inputAccessoryViewID}
+                        />
+                        <InputAccessoryView nativeID={inputAccessoryViewID}>
+                            <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
+                                <TouchableOpacity style={{ padding: hp('1%'), }}
+                                    onPress={Keyboard.dismiss}>
+                                    <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </InputAccessoryView>
+                        {this.renderButton()}
+                        <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                            <Text style={{ color: '#999999' }}>
+                                Already have an account?
+                        </Text>
+                            <Text> </Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Login')}>
+                                <Text style={{ color: '#457EED' }}>
+                                    Login
+                            </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
+                            {this.state.error}
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
+        else if (Platform.OS = 'android') {
+            return (
+                <View style={styles.container}>
+                    <View style={styles.smallerContainer}>
+                        <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Create Account</Text>
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Full Name</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(fullName) => this.setState({ fullName })}
+                            value={this.state.fullName}
+                            autoCorrect={false}
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(email) => this.setState({ email })}
+                            value={this.state.email}
+                            autoCapitalize='none'
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(password) => this.setState({ password })}
+                            value={this.state.password}
+                            secureTextEntry={true}
+                            autoCapitalize='none'
+                        />
+                        <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
+                        <TextInput style={styles.input}
+                            onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+                            value={this.state.confirmPassword}
+                            secureTextEntry={true}
+                            autoCapitalize='none'
+                        />
+                        {this.renderButton()}
+                        <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                            <Text style={{ color: '#999999' }}>
+                                Already have an account?
+                        </Text>
+                            <Text> </Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Login')}>
+                                <Text style={{ color: '#457EED' }}>
+                                    Login
+                            </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
+                            {this.state.error}
+                        </Text>
+                    </View>
+                </View>
+            );
+        }
+    }
+
     render() {
         const inputAccessoryViewID = 'inputAccessoryView1';
         return (
-            <View style={styles.container}>
-                <View style={styles.smallerContainer}>
-                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Create Account</Text>
-                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Full Name</Text>
-                    <TextInput style={styles.input}
-                        onChangeText={(fullName) => this.setState({ fullName })}
-                        value={this.state.fullName}
-                        inputAccessoryViewID={inputAccessoryViewID}
-                        autoCorrect={false}
-                    />
-                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
-                    <TextInput style={styles.input}
-                        onChangeText={(email) => this.setState({ email })}
-                        value={this.state.email}
-                        autoCapitalize='none'
-                        inputAccessoryViewID={inputAccessoryViewID}
-                    />
-                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
-                    <TextInput style={styles.input}
-                        onChangeText={(password) => this.setState({ password })}
-                        value={this.state.password}
-                        secureTextEntry={true}
-                        autoCapitalize='none'
-                        inputAccessoryViewID={inputAccessoryViewID}
-                    />
-                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Confirm Password</Text>
-                    <TextInput style={styles.input}
-                        onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
-                        value={this.state.confirmPassword}
-                        secureTextEntry={true}
-                        autoCapitalize='none'
-                        inputAccessoryViewID={inputAccessoryViewID}
-                    />
-                    <InputAccessoryView nativeID={inputAccessoryViewID}>
-                        <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
-                            <TouchableOpacity style={{ padding: hp('1%'), }}
-                                onPress={Keyboard.dismiss}>
-                                <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </InputAccessoryView>
-                    {this.renderButton()}
-                    <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
-                        <Text style={{ color: '#999999' }}>
-                            Already have an account?
-                        </Text>
-                        <Text> </Text>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Login')}>
-                            <Text style={{ color: '#457EED' }}>
-                                Login
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
-                        {this.state.error}
-                    </Text>
-                </View>
-            </View>
+            this.renderView(inputAccessoryViewID)
         );
     }
 }

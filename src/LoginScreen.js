@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
+import { Platform, StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator, InputAccessoryView, Keyboard } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
@@ -15,9 +15,8 @@ export default class LoginScreen extends React.Component {
     }
 
     componentWillMount() {
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) 
-            {
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
                 console.log("User is logged in => " + user.displayName + " - " + user.email)
             }
             else {
@@ -102,10 +101,9 @@ export default class LoginScreen extends React.Component {
         )
     }
 
-    render() {
-        const inputAccessoryViewID = 'inputAccessoryView1';
-        return (
-            <View style={styles.container}>
+    renderView(inputAccessoryViewID) {
+        if (Platform.OS == 'ios') {
+            return (
                 <View style={styles.smallerContainer}>
                     <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please Login</Text>
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
@@ -126,7 +124,7 @@ export default class LoginScreen extends React.Component {
                     />
                     <InputAccessoryView nativeID={inputAccessoryViewID}>
                         <View style={{ backgroundColor: 'white', alignItems: 'flex-end', backgroundColor: '#eff0f1' }}>
-                            <TouchableOpacity style={{ padding: hp('1%'),  }}
+                            <TouchableOpacity style={{ padding: hp('1%'), }}
                                 onPress={Keyboard.dismiss}>
                                 <Text style={{ color: '#457EED', fontSize: wp('5%') }}>Hide</Text>
                             </TouchableOpacity>
@@ -137,19 +135,19 @@ export default class LoginScreen extends React.Component {
                     >
                         <Text style={{ color: '#457EED' }}>
                             Forgot your password?
-                        </Text>
+                            </Text>
                     </TouchableOpacity>
                     {this.renderButton()}
                     <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
                         <Text style={{ color: '#999999' }}>
                             Don't have an account?
-                        </Text>
+                            </Text>
                         <Text> </Text>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateAccount')}>
                             <Text style={{ color: '#457EED' }}>
                                 Sign up
-                            </Text>
+                                </Text>
                         </TouchableOpacity>
                     </View>
 
@@ -157,8 +155,62 @@ export default class LoginScreen extends React.Component {
                         {this.state.error}
                     </Text>
                 </View>
+            );
+        }
+        else if (Platform.OS == 'android') {
+            return (
+                <View style={styles.smallerContainer}>
+                    <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please Login</Text>
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                        autoCapitalize='none'
+                        keyboardType="default"
+                    />
+                    <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Password</Text>
+                    <TextInput style={styles.input}
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        autoCapitalize='none'
+                    />
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('ForgotAccount')}
+                    >
+                        <Text style={{ color: '#457EED' }}>
+                            Forgot your password?
+                            </Text>
+                    </TouchableOpacity>
+                    {this.renderButton()}
+                    <View style={{ flexDirection: 'row', marginTop: hp('2%') }}>
+                        <Text style={{ color: '#999999' }}>
+                            Don't have an account?
+                            </Text>
+                        <Text> </Text>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('CreateAccount')}>
+                            <Text style={{ color: '#457EED' }}>
+                                Sign up
+                                </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text style={{ marginTop: hp('2%'), textAlign: 'center', color: 'red' }}>
+                        {this.state.error}
+                    </Text>
+                </View>
+            );
+        }
+    }
+
+    render() {
+        const inputAccessoryViewID = 'inputAccessoryView1';
+        return (
+            <View style={styles.container}>
+                {this.renderView(inputAccessoryViewID)}
             </View>
-        );
+        )
     }
 }
 
