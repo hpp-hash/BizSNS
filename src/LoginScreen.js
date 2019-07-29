@@ -107,7 +107,7 @@ export default class LoginScreen extends React.Component {
                 <View style={styles.smallerContainer}>
                     <Text style={{ color: '#457EED', fontSize: wp('7%'), marginBottom: hp('5%') }}>Please Login</Text>
                     <Text style={{ color: '#999999', marginBottom: hp('1%') }}>Email</Text>
-                    <TextInput style={styles.input}
+                    <TextInput style={[styles.input, {padding: 0}]}
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         autoCapitalize='none'
@@ -233,9 +233,13 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: wp('0.1%'),
         borderRadius: wp('1%'),
-        height: hp('5%'),
         borderColor: '#999999',
-        marginBottom: hp('3%')
+        marginBottom: hp('3%'),
+        ...Platform.select({
+            ios: {
+                height: hp('5%')
+            }
+        })
     },
     button: {
         borderRadius: wp('10%'),

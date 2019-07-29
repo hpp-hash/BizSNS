@@ -144,7 +144,11 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: wp('0.1%'),
         borderRadius: wp('1%'),
-        height: hp('5%'),
+        ...Platform.select({
+            ios: {
+                height: hp('5%')
+            }
+        }),
         borderColor: '#999999',
         width: wp('70%')
     },
