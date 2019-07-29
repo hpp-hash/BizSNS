@@ -14,7 +14,12 @@ export default class ForgotAccountScreen extends React.Component {
     }
 
     onButtonPress() {
-        const { email } = this.state;
+        let { email } = this.state;
+        
+        if (email != undefined) {
+            email = email.trim()
+        }
+
         let self = this;
         this.setState({ loading: true });
         firebase.auth().sendPasswordResetEmail(email)

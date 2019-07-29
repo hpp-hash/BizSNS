@@ -27,7 +27,10 @@ export default class LoginScreen extends React.Component {
 
     onButtonPress() {
         this.setState({ error: '', loading: true })
-        const { email, password } = this.state;
+        let { email, password } = this.state;
+        if (email != undefined) {
+            email = email.trim()
+        }
         // REMOVE
         if (email == "11") {
             this.props.navigation.navigate('PostHistory')
@@ -46,7 +49,12 @@ export default class LoginScreen extends React.Component {
     }
 
     onLoginSuccess() {
-        const { email, password } = this.state;
+        let { email, password } = this.state;
+
+        if (email != undefined) {
+            email = email.trim()
+        }
+
         let self = this;
         firebase.firestore().collection("users").doc(email).get()
             .then(function (document) {

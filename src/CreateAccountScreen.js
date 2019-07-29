@@ -17,7 +17,15 @@ export default class LoginScreen extends React.Component {
         this.setState({ error: '', loading: true })
         let self = this;
         setTimeout(function () {
-            const { fullName, email, password, confirmPassword } = self.state;
+            let { fullName, email, password, confirmPassword } = self.state;
+            if (email != undefined ) {
+                email = email.trim()
+            }
+
+            if (fullName != undefined ) {
+                fullName = fullName.trim()
+            }
+
             if (fullName != "" && email != "" && password != "" && confirmPassword != "") {
                 if (password != confirmPassword) {
                     self.setState({
