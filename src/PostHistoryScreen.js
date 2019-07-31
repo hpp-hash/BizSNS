@@ -36,7 +36,7 @@ export default class PostHistoryScreen extends React.Component {
         let localDict = {}
         let localArr = []
 
-        firebase.firestore().collection("posts").where("email", "==", userEmail)
+        firebase.firestore().collection("posts").where("email", "==", userEmail).orderBy("title")
         .get().then(function (querySnapshot) {
             if (querySnapshot.empty) {
                 console.log("email, ==, ", userEmail, " EMPTY")
