@@ -63,7 +63,7 @@ export default class PostHistoryScreen extends React.Component {
 
     render() {
         const { dataRetrieved } = this.state
-        console.log(dataRetrieved);
+        // console.log(dataRetrieved);
         return (
             <View style={styles.container}>
                 <SectionList
@@ -72,7 +72,7 @@ export default class PostHistoryScreen extends React.Component {
                     // ]}
                     sections={dataRetrieved}
                     renderSectionHeader={({ section }) => {
-                        console.log("section = ", section)
+                        // console.log("section = ", section)
                         return (
                             <View style={styles.headerView}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: wp('5%'), marginVertical: hp('1%') }}>{section.title}</Text>
@@ -80,7 +80,7 @@ export default class PostHistoryScreen extends React.Component {
                         );
                     }}
                     renderItem={({ item }) => {
-                        console.log("item = ", item);
+                        // console.log("item = ", item);
                         return (
                             <View style={styles.postView}>
                                 <Text>

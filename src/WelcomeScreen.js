@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ToggleSwitch from 'toggle-switch-react-native';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 
 export default class HomeScreen extends React.Component {
@@ -17,79 +18,96 @@ export default class HomeScreen extends React.Component {
         isOnPN: false,
     }
     render() {
-        return(
-                <View style={styles.smallerContainer}>
-                    <Text style={[styles.text, {color: 'black'}]}>
-                        What platforms would you like to post your message?
-                    </Text>
-                    <View style={{flexDirection: 'column', }}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Image style={styles.image} source={require('../assets/facebook.png')}/>
-                            <View style={{width: wp('30%')}}>
-                                <Text style={styles.text}>Facebook</Text>
-                            </View>
-                            <ToggleSwitch
-                                isOn={this.state.isOnFB}
-                                onColor='#457EED'
-                                offColor='#999999'
-                                size='medium'
-                                onToggle={ (isOnFB) => this.setState({isOnFB})}
-                            />
+        return (
+            <View style={styles.smallerContainer}>
+                <Text style={[styles.text, { color: 'black' }]}>
+                    What platforms would you like to post your message?
+                </Text>
+                <View style={{ flexDirection: 'column', }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.image} source={require('../assets/facebook.png')} />
+                        <View>
+                            <Text style={styles.text}>Facebook</Text>
                         </View>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Image style={styles.image} source={require('../assets/twitter.png')}/>
-                            <View style={{width: wp('30%')}}>
-                                <Text style={styles.text}>Twitter</Text>
-                            </View>
-                            <ToggleSwitch
-                                isOn={this.state.isOnTW}
-                                onColor='#457EED'
-                                offColor='#999999'
-                                size='medium'
-                                onToggle={ (isOnTW) => this.setState({isOnTW})}
-                            />
+                        {/* <ToggleSwitch
+                            isOn={this.state.isOnFB}
+                            onColor='#457EED'
+                            offColor='#999999'
+                            size='medium'
+                            onToggle={ (isOnFB) => this.setState({isOnFB})}
+                        /> */}
+                        <LoginButton
+                            onLoginFinished={
+                                (error, result) => {
+                                    if (error) {
+                                        console.log("login has error: " + result.error);
+                                    } else if (result.isCancelled) {
+                                        console.log("login is cancelled.");
+                                    } else {
+                                        AccessToken.getCurrentAccessToken().then(
+                                            (data) => {
+                                                console.log(data.accessToken.toString())
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                            onLogoutFinished={() => console.log("logout.")} />
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.image} source={require('../assets/twitter.png')} />
+                        <View style={{ width: wp('30%') }}>
+                            <Text style={styles.text}>Twitter</Text>
                         </View>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Image style={styles.image} source={require('../assets/instagram.png')}/>
-                            <View style={{width: wp('30%')}}>
-                                <Text style={styles.text}>Instagram</Text>
-                            </View>
-                            <ToggleSwitch
-                                isOn={this.state.isOnIN}
-                                onColor='#457EED'
-                                offColor='#999999'
-                                size='medium'
-                                onToggle={ (isOnIN) => this.setState({isOnIN})}
-                            />
+                        <ToggleSwitch
+                            isOn={this.state.isOnTW}
+                            onColor='#457EED'
+                            offColor='#999999'
+                            size='medium'
+                            onToggle={(isOnTW) => this.setState({ isOnTW })}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.image} source={require('../assets/instagram.png')} />
+                        <View style={{ width: wp('30%') }}>
+                            <Text style={styles.text}>Instagram</Text>
                         </View>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Image style={styles.image} source={require('../assets/linkedin.png')}/>
-                            <View style={{width: wp('30%')}}>
-                                <Text style={styles.text}>LinkedIn</Text>
-                            </View>
-                            <ToggleSwitch
-                                isOn={this.state.isOnLI}
-                                onColor='#457EED'
-                                offColor='#999999'
-                                size='medium'
-                                onToggle={ (isOnLI) => this.setState({isOnLI})}
-                            />
+                        <ToggleSwitch
+                            isOn={this.state.isOnIN}
+                            onColor='#457EED'
+                            offColor='#999999'
+                            size='medium'
+                            onToggle={(isOnIN) => this.setState({ isOnIN })}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.image} source={require('../assets/linkedin.png')} />
+                        <View style={{ width: wp('30%') }}>
+                            <Text style={styles.text}>LinkedIn</Text>
                         </View>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Image style={styles.image} source={require('../assets/pinterest.png')}/>
-                            <View style={{width: wp('30%')}}>
-                                <Text style={styles.text}>Pinterest</Text>
-                            </View>
-                            <ToggleSwitch
-                                isOn={this.state.isOnPN}
-                                onColor='#457EED'
-                                offColor='#999999'
-                                size='medium'
-                                onToggle={ (isOnPN) => this.setState({isOnPN})}
-                            />
+                        <ToggleSwitch
+                            isOn={this.state.isOnLI}
+                            onColor='#457EED'
+                            offColor='#999999'
+                            size='medium'
+                            onToggle={(isOnLI) => this.setState({ isOnLI })}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.image} source={require('../assets/pinterest.png')} />
+                        <View style={{ width: wp('30%') }}>
+                            <Text style={styles.text}>Pinterest</Text>
                         </View>
+                        <ToggleSwitch
+                            isOn={this.state.isOnPN}
+                            onColor='#457EED'
+                            offColor='#999999'
+                            size='medium'
+                            onToggle={(isOnPN) => this.setState({ isOnPN })}
+                        />
                     </View>
                 </View>
+            </View>
         );
     }
 }
